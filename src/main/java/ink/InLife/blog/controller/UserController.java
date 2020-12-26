@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/user/index")
+    @RequestMapping("/index")
     public ResponseEntity<Object> Index(Integer id) {
         if (id == null) {
             return new ResponseEntity<>("请输入id", HttpStatus.OK);
@@ -25,7 +26,7 @@ public class UserController {
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @RequestMapping("/user/indexV2")
+    @RequestMapping("/indexV2")
     public ResponseEntity<Object> Indexv2() {
         String result = HttpUtil.get("https://www.360kad.com/");
         return new ResponseEntity<>(result, HttpStatus.OK);
