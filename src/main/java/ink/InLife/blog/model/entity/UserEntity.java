@@ -14,4 +14,10 @@ public class UserEntity {
 
     @TableField("nickname")
     private String NickName;
+
+    @TableField("Password")
+    private String Password;
+
+    @TableField("Role")
+    private String Role;
 }
