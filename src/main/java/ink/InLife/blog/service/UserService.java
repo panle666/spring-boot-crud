@@ -26,21 +26,21 @@ public class UserService implements UserDetailsService {
     private UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         QueryWrapper<UserEntity> userQuery = new QueryWrapper<>();
-        userQuery.lambda().eq(UserEntity::getNickName, s);
+        userQuery.lambda().eq(UserEntity::getNickName, userName);
         // 1.查询用户
         UserEntity userEntity = userMapper.selectOne(userQuery);
         if (userEntity == null) {
             // 这里找不到必须抛异常
-            throw new UsernameNotFoundException("User" + s + " was not found in db");
+            throw new UsernameNotFoundException("User" + userName + " was not found in db");
         }
         // 2. 设置角色
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userEntity.getRole());
         grantedAuthorities.add(grantedAuthority);
 
-        return new org.springframework.security.core.userdetails.User(s,
+        return new org.springframework.security.core.userdetails.User(userName,
                 userEntity.getPassword(), grantedAuthorities);
     }
 
