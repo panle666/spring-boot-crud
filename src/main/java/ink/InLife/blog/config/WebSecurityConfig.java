@@ -10,6 +10,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
+    //匿名用户访问无权限资源时的异常
+    @Autowired
+    CustomizeAuthenticationEntryPoint authenticationEntryPoint;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService);
@@ -17,14 +21,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        super.configure(http);
         http
                 .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin()
-                .and()
-                .httpBasic();
+//                .antMatchers("/user")
+//                .hasAnyAuthority("query_user")
+                .anyRequest().authenticated()
+
+                //异常处理(权限拒绝、登录失效等)
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and().formLogin();
     }
 }
